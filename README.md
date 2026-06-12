@@ -1,4 +1,9 @@
-# Analizador Léxico-Sintáctico (Icon Language Parser) - TC 2026
+# Analizador Léxico-Sintáctico de Iconos
+### Integrantes:
+* Bys, Paz
+* Cantero, Augusto
+* Centurión Villamayor, Giovanni Isaías
+* Lezcano, Lautaro
 
 Este proyecto implementa un analizador léxico (Lexer) y un analizador sintáctico (Parser) descendente recursivo para un lenguaje formal icónico de asistencia al viajero, desarrollado en el marco de la materia **Teoría de la Computación (2026)**.
 
