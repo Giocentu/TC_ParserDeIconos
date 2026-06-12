@@ -97,19 +97,7 @@ Accede directamente a la URL pasando tu consulta codificada en el parámetro `en
 http://localhost:8000/?entrada=%5BPOR_FAVOR%5D+%5BCAF%C3%89%5D+%5BY%5D+%5BWIFI%5D
 ```
 
-### Método B: Usando Postman (Recomendado para Windows)
-1. Crea una nueva petición en Postman.
-2. Selecciona el método **POST** y usa la URL `http://localhost:8000/`.
-3. En la pestaña **Body**, selecciona **raw** y cambia el formato a **JSON**.
-4. Pega el siguiente cuerpo de ejemplo:
-   ```json
-   {
-     "entrada": "[IR_A] [AUTO] [HACIA] [CIUDAD]"
-   }
-   ```
-5. Presiona **Send** para ver la respuesta JSON estructurada con el AST.
-
-### Método C: Vía Terminal / Consola
+### Método B: Vía Terminal / Consola
 * **En Linux / macOS / Git Bash (usando cURL):**
   ```bash
   curl -G "http://localhost:8000/" --data-urlencode "entrada=[POR_FAVOR] [CAFÉ] [Y] [WIFI]"
