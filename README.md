@@ -92,9 +92,13 @@ Esta interfaz interactiva SPA te permitirá probar el parser de forma visual y a
 Si prefieres probar el parser enviando peticiones directas, puedes hacerlo de las siguientes maneras:
 
 ### Método A: Desde el Navegador (GET)
-Accede directamente a la URL pasando tu consulta codificada en el parámetro `entrada`:
+Accede directamente desde el navegador escribiendo tu consulta en el parámetro `entrada` (el navegador se encargará de codificar los espacios y corchetes automáticamente al pegarlo o presionar Enter):
 ```text
-http://localhost:8000/?entrada=%5BPOR_FAVOR%5D+%5BCAF%C3%89%5D+%5BY%5D+%5BWIFI%5D
+http://localhost:8000/?entrada=[POR_FAVOR] [WIFI]
+```
+O un ejemplo con caracteres acentuados:
+```text
+http://localhost:8000/?entrada=[CAFÉ]
 ```
 
 ### Método B: Vía Terminal / Consola
