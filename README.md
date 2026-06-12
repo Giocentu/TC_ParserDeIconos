@@ -17,26 +17,6 @@ El sistema valida cadenas de íconos representados por corchetes (ej. `[POR_FAVO
 *   Extensión **`mbstring`** habilitada en PHP (necesaria para el soporte multibyte UTF-8 de íconos como `CAFÉ`, `BAÑO` y `MONTAÑA`).
 
 ---
-
-## Estructura del Proyecto
-
-```text
-TI_parser2026/
-├── src/
-│   ├── Lexer.php            # Analizador Léxico
-│   ├── LexerException.php   # Excepciones del Lexer (línea y columna)
-│   ├── Parser.php           # Analizador Sintáctico (Recursive Descent LL(1))
-│   ├── ParserException.php  # Excepciones del Parser (línea y columna)
-│   └── Token.php            # Representación de un componente léxico
-├── test/
-│   └── test_runner.php      # Suite de pruebas unitarias (17 casos)
-├── bitacora.md              # Registro de dificultades y aprendizaje
-├── index.php                # Endpoint de la API REST (Controlador principal)
-└── README.md                # Instrucciones de ejecución (este archivo)
-```
-
----
-
 ## Instrucciones de Compilación y Ejecución
 
 Dado que PHP es un lenguaje interpretado, **no requiere un paso de compilación previo**. Los scripts se ejecutan directamente sobre el motor de PHP.
