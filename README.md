@@ -14,61 +14,123 @@ El sistema valida cadenas de íconos representados por corchetes (ej. `[POR_FAVO
 ## Requisitos
 
 *   **PHP >= 8.0**
-*   Extensión **`mbstring`** habilitada en PHP (necesaria para el soporte multibyte UTF-8 de íconos como `CAFÉ`, `BAÑO` y `MONTAÑA`).
+*   Extensión **`mbstring`** habilitada en PHP (necesaria para el soporte multibyte UTF-8 de íconos con acentos o eñes como `CAFÉ`, `BAÑO` y `MONTAÑA`).
 
 ---
+
+## Guía de Configuración Rápida en Windows
+
+Si tú o tus compañeros usan Windows y no tienen PHP configurado o no saben cómo ejecutar el proyecto, sigan estos sencillos pasos:
+
+### 1. Instalar PHP
+* **Opción A (Recomendada - Manual):**
+  1. Descarga el archivo ZIP de PHP (versión x64 Thread Safe o Non-Thread Safe) desde el sitio oficial: [windows.php.net/download](https://windows.php.net/download/).
+  2. Crea una carpeta en tu disco local, por ejemplo: `C:\php`, y extrae allí todo el contenido del ZIP.
+  3. Agrega esa carpeta a la variable de entorno `Path`:
+     - Presiona la tecla **Inicio**, escribe `variables de entorno` y selecciona **Editar las variables de entorno del sistema**.
+     - Haz clic en el botón **Variables de entorno...**.
+     - En la sección **Variables del sistema**, selecciona la variable **Path** y haz clic en **Editar**.
+     - Haz clic en **Nuevo** y escribe `C:\php`.
+     - Haz clic en **Aceptar** en todas las ventanas para guardar los cambios.
+  4. Abre una nueva terminal (PowerShell o Símbolo del sistema CMD) y ejecuta `php -v` para comprobar la instalación.
+
+* **Opción B (Si ya usas XAMPP / Laragon / WampServer):**
+  - Si ya tienes alguna de estas herramientas instaladas, el ejecutable de PHP ya está en tu computadora. Solo debes buscar su ubicación (ej. `C:\xampp\php\`) y agregar esa ruta a tu variable de entorno **Path** siguiendo los pasos anteriores.
+
+### 2. Habilitar la extensión `mbstring` (¡Muy Importante!)
+El parser valida caracteres multibyte (acentos y eñes). Si no habilitas esta extensión, el programa podría fallar o no reconocer caracteres especiales.
+1. Abre tu carpeta de PHP (ej. `C:\php`).
+2. Cambia el nombre del archivo `php.ini-development` a **`php.ini`**.
+3. Abre `php.ini` con cualquier editor de texto (como el Bloc de notas o VS Code).
+4. Busca la línea `;extension_dir = "ext"` (alrededor de la línea 760) y quítale el punto y coma (`;`) del inicio:
+   ```ini
+   extension_dir = "ext"
+   ```
+5. Busca la línea `;extension=mbstring` (alrededor de la línea 920) y quítale el punto y coma (`;`) del inicio:
+   ```ini
+   extension=mbstring
+   ```
+6. Guarda y cierra el archivo.
+
+---
+
 ## Instrucciones de Compilación y Ejecución
 
 Dado que PHP es un lenguaje interpretado, **no requiere un paso de compilación previo**. Los scripts se ejecutan directamente sobre el motor de PHP.
 
 ### 1. Ejecutar las Pruebas Unitarias
-El proyecto cuenta con 17 pruebas que cubren la validación léxica de UTF-8, el reporte de posiciones de error y las 11 producciones de la gramática sintáctica (casos válidos e inválidos).
+El proyecto cuenta con 17 pruebas unitarias automáticas para verificar que todo funcione correctamente (validación de UTF-8, reporte de errores con línea/columna y producciones gramaticales).
 
-Para ejecutar los tests, corre el siguiente comando desde la raíz del proyecto:
+Desde la terminal del proyecto (CMD, PowerShell o Git Bash), ejecuta:
 ```bash
 php test/test_runner.php
 ```
+Si todo es correcto, verás una lista de tests con el mensaje `✓ PASÓ: [Nombre del test]`.
 
 ### 2. Iniciar el Servidor Web Local
-Para probar el analizador desde un navegador, Postman o mediante peticiones `curl`, inicia el servidor integrado de PHP:
+Inicia el servidor integrado de PHP para poder usar la API y la UI:
 ```bash
 php -S localhost:8000
 ```
+*Deja esta terminal abierta.* El servidor se ejecutará en segundo plano.
 
-### 3. Probar la Interfaz Gráfica Interactiva (IDE Web)
-Una vez que el servidor web esté en funcionamiento, puedes abrir tu navegador y acceder directamente a la raíz del servidor:
+### 3. Probar la Interfaz Gráfica (IDE Web)
+Con el servidor corriendo, abre tu navegador web favorito (Chrome, Edge, Firefox, etc.) e ingresa a:
 ```text
 http://localhost:8000/
 ```
-Esta interfaz SPA (Single Page Application) te permitirá probar el analizador de forma mucho más amigable, ofreciéndote:
-* **Teclado Virtual de Íconos**: Organizado por categorías gramaticales de la GLC para insertar rápidamente los corchetes y caracteres acentuados.
-* **Secuencia de Tokens**: Visualización en tiempo real de cada badge de token y sus posiciones exactas.
-* **Árbol Sintáctico (AST) Interactivo**: Un árbol colapsable dinámicamente en HTML/CSS junto con una vista de código JSON formateado y coloreado.
-* **Reporte de Errores Detallado**: Visualización interactiva que resalta la fase del error (léxico o sintáctico), el mensaje y la ubicación exacta de línea/columna.
+Esta interfaz interactiva SPA te permitirá probar el parser de forma visual y amigable (especialmente útil si no estás familiarizado con llamadas a APIs):
+* **Teclado Virtual de Íconos**: Haz clic en los botones para armar tu secuencia de íconos respetando la gramática.
+* **Tokens en Tiempo Real**: Observa cómo se parsea la cadena y qué badges de tokens se generan.
+* **Árbol Sintáctico Interactivo**: Visualiza el AST de manera gráfica y colapsable, o examina el JSON coloreado.
+* **Reporte de Errores**: Si cometes un error léxico o sintáctico, la interfaz te dirá exactamente qué falló y en qué línea/columna.
 
 ---
 
-## Consumo del Endpoint (API REST)
+## Consumo del Endpoint (API REST) y Pruebas Manuales
 
-Una vez que el servidor web local esté corriendo en `http://localhost:8000`, puedes realizar consultas enviando la secuencia de íconos a analizar.
+Si prefieres probar el parser enviando peticiones directas, puedes hacerlo de las siguientes maneras:
 
-### Método A: Petición GET (Vía Navegador o cURL)
-Accede directamente a la URL pasando la cadena en el parámetro `entrada` (URL encoded):
+### Método A: Desde el Navegador (GET)
+Accede directamente a la URL pasando tu consulta codificada en el parámetro `entrada`:
 ```text
 http://localhost:8000/?entrada=%5BPOR_FAVOR%5D+%5BCAF%C3%89%5D+%5BY%5D+%5BWIFI%5D
 ```
-O desde la terminal con `curl`:
-```bash
-curl -G "http://localhost:8000/" --data-urlencode "entrada=[POR_FAVOR] [CAFÉ] [Y] [WIFI]"
-```
 
-### Método B: Petición POST (JSON Payload)
-Envía un cuerpo JSON con la clave `entrada`:
-```bash
-curl -X POST http://localhost:8000/ \
-     -H "Content-Type: application/json" \
-     -d '{"entrada": "[IR_A] [AUTO] [HACIA] [CIUDAD]"}'
-```
+### Método B: Usando Postman (Recomendado para Windows)
+1. Crea una nueva petición en Postman.
+2. Selecciona el método **POST** y usa la URL `http://localhost:8000/`.
+3. En la pestaña **Body**, selecciona **raw** y cambia el formato a **JSON**.
+4. Pega el siguiente cuerpo de ejemplo:
+   ```json
+   {
+     "entrada": "[IR_A] [AUTO] [HACIA] [CIUDAD]"
+   }
+   ```
+5. Presiona **Send** para ver la respuesta JSON estructurada con el AST.
+
+### Método C: Vía Terminal / Consola
+* **En Linux / macOS / Git Bash (usando cURL):**
+  ```bash
+  curl -G "http://localhost:8000/" --data-urlencode "entrada=[POR_FAVOR] [CAFÉ] [Y] [WIFI]"
+  ```
+  O con POST:
+  ```bash
+  curl -X POST http://localhost:8000/ \
+       -H "Content-Type: application/json" \
+       -d '{"entrada": "[IR_A] [AUTO] [HACIA] [CIUDAD]"}'
+  ```
+
+* **En Windows PowerShell (usando Invoke-RestMethod):**
+  Dado que `curl` tradicional con comillas simples suele fallar en las consolas nativas de Windows, abre PowerShell y corre:
+  ```powershell
+  # Petición GET
+  Invoke-RestMethod -Uri "http://localhost:8000/?entrada=[POR_FAVOR] [CAFÉ] [Y] [WIFI]"
+
+  # Petición POST
+  $body = @{ entrada = "[IR_A] [AUTO] [HACIA] [CIUDAD]" } | ConvertTo-Json -Compress
+  Invoke-RestMethod -Uri "http://localhost:8000/" -Method Post -Body $body -ContentType "application/json; charset=utf-8"
+  ```
 
 ### Ejemplo de Respuesta Exitosa (200 OK)
 ```json
